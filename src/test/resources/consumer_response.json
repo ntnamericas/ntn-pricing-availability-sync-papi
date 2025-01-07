@@ -1,0 +1,62 @@
+{
+  "headers": {
+    
+  },
+  "attachments": {
+    
+  },
+  "body": {
+    "getPartsDetailResponse": {
+      "e1MessageList": null,
+      "partDetails": {
+        "BOM": "6203LLU/15.875/5C[T100]",
+        "abcSalesCode": null,
+        "branchQuantities": {
+          "branch": "1801",
+          "branchFlag": "P",
+          "bulkQuantity": "0",
+          "quantity": "2350",
+          "safety1x1": "0",
+          "safetyBulk": "0"
+        },
+        "branchQuantities": {
+          "branch": "1802",
+          "branchFlag": "P",
+          "bulkQuantity": "0",
+          "quantity": "0",
+          "safety1x1": "0",
+          "safetyBulk": "0"
+        },
+        "branchQuantities": {
+          "branch": "1803",
+          "branchFlag": "NP",
+          "bulkQuantity": "0",
+          "quantity": "0",
+          "safety1x1": "0",
+          "safetyBulk": "0"
+        },
+        "brand": "NTN",
+        "buyerNumber": "0",
+        "cost02": "1.8600",
+        "cost07": "1.8600",
+        "cpn": null,
+        "cumLT": "0",
+        "description": "0",
+        "forcast": "0",
+        "inTransit": "0",
+        "mfgOrigin": "TMF",
+        "part": "B-6203LLU/15.875/5C[T100]",
+        "plannerNumber": "50872",
+        "poQuantity": "0",
+        "price": "66.1200",
+        "priceMethodGroup": "P-SPECIAL",
+        "rebate1": null,
+        "rebate2": null,
+        "requestQuantity": "0",
+        "rework": "0",
+        "shipTo": "30339",
+        "workOrderQuantity": "0"
+      }
+    }
+  }
+}

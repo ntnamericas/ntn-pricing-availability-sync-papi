@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+	<munit:config name="global-error-test-suite.xml" />
+	<munit:test name="APIKIT:BAD_REQUEST" doc:id="a91d10a4-28ce-491c-9abe-cdb376f5080f" description="Test" expectedErrorType="APIKIT:BAD_REQUEST">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="apikit router" doc:id="c8494344-60e4-43d5-9b9c-1cdffd92028f" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="apikit router" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:BAD_REQUEST" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="ntn-pricing-availability-sync-papi-main" doc:id="45030c11-31d8-4337-8626-4a84736f3455" name="ntn-pricing-availability-sync-papi-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="checkingPayload" doc:id="b664c6a5-449b-4fa4-83b3-caf618c75022" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+    <munit:test name="APIKIT:METHOD_NOT_ALLOWED" doc:id="ddeaa3e2-897d-44f5-8863-88f2e051a608" description="Test" expectedErrorType="APIKIT:METHOD_NOT_ALLOWED">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="apikit router" doc:id="fa756922-8db9-4bbf-85aa-c881e681a087" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="apikit router" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:METHOD_NOT_ALLOWED" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="ntn-pricing-availability-sync-papi-main" doc:id="7a2e9b51-106f-490a-8fa9-16471e0523b4" name="ntn-pricing-availability-sync-papi-main" />
+
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="checkingPayload" doc:id="57a14773-3237-46e1-ac87-b3890ba87d62" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+    <munit:test name="APIKIT:NOT_ACCEPTABLE" doc:id="f1fb5976-6fc2-47e0-a4b7-9a36031905ed" description="Test" expectedErrorType="APIKIT:NOT_ACCEPTABLE">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="apikit router" doc:id="bf9d1485-9b79-4ac6-ae3c-ffb120890fd9" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="apikit router" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_ACCEPTABLE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="ntn-pricing-availability-sync-papi-main" doc:id="2984c1df-77a5-44d6-8c4a-4ca2cd72242a" name="ntn-pricing-availability-sync-papi-main" />
+
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="checkingPayload" doc:id="a808640b-91e3-4a60-b8db-8deecbc941d4" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+    <munit:test name="APIKIT:NOT_FOUND" doc:id="2bee2e8f-fcd0-4377-96c3-96d9afac49d8" description="Test" expectedErrorType="APIKIT:NOT_FOUND">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="apikit router" doc:id="28f1ed90-9f5c-44d9-bcce-9a33f3d7c549" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="apikit router" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_FOUND" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="ntn-pricing-availability-sync-papi-main" doc:id="b239dd0a-cff8-4294-9ae1-b9fc39dc89c9" name="ntn-pricing-availability-sync-papi-main" />
+
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="checkingPayload" doc:id="aa2094d2-32b0-4866-a2e2-25fe380d5007" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+    <munit:test name="APIKIT:NOT_IMPLEMENTED" doc:id="3a68ed0e-f943-424f-be6e-34fde4b9c0f9" description="Test" expectedErrorType="APIKIT:NOT_IMPLEMENTED">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="apikit router" doc:id="792ca8f5-5910-4d99-9736-dffed70bc4c9" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="apikit router" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_IMPLEMENTED" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="ntn-pricing-availability-sync-papi-main" doc:id="192022bb-1a00-4c2e-a2d3-b0c6b7d128f3" name="ntn-pricing-availability-sync-papi-main" />
+
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="checkingPayload" doc:id="bf169022-5672-41c9-9d87-32d81481ff1e" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+    <munit:test name="APIKIT:UNSUPPORTED_MEDIA_TYPE" doc:id="1d34d52c-c3d7-4d46-b395-e435a416afe0" description="Test" expectedErrorType="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="apikit router" doc:id="7ef5a1bf-0bb4-479e-afd1-e4957edec212" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="apikit router" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:UNSUPPORTED_MEDIA_TYPE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="ntn-pricing-availability-sync-papi-main" doc:id="922df361-ba66-46e5-9b06-2ff90563349f" name="ntn-pricing-availability-sync-papi-main" />
+
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="checkingPayload" doc:id="7aac7234-73d2-4a68-a91e-7c209a641105" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+    <munit:test name="APIKIT:ANY" doc:id="fb7a6a8b-6feb-485b-91db-b469ac85f28d" description="Test" expectedErrorType="APIKIT:ANY">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="apikit router" doc:id="1b6c3ec2-3724-4568-ad35-96850f60d264" processor="apikit:router" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="apikit router" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:ANY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="ntn-pricing-availability-sync-papi-main" doc:id="4827c8ba-d8ca-4e88-8048-9e8d2a36137f" name="ntn-pricing-availability-sync-papi-main" />
+
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="checkingPayload" doc:id="b4891af1-01bc-4c01-bd03-12cc5edd4464" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+    <munit:test name="WSC:CONNECTIVITY" doc:id="7dba9484-5bd2-4a43-9d36-47de9fb3a7db" description="Test" expectedErrorType="WSC:CONNECTIVITY">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="business call function" doc:id="9d62d8d0-23c6-4591-87fe-d497583a8970" processor="wsc:consume" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="business function call" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="4d9100ce-9fb7-4765-b973-1c18ea8378dc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="WSC:CONNECTIVITY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="email send" doc:id="1d9961ac-060e-4930-94d4-28ef57a5afac" processor="email:send" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="email send" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="c18dd49f-840e-4703-927c-12cb7e305a15" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+
+		</munit:behavior>
+		<munit:execution>
+			<munit:set-event doc:name="input request" doc:id="92169813-447c-4614-a96a-3036eb13be3a">
+				<munit:payload value='#[readUrl("classpath://input_request.json")]' />
+			</munit:set-event>
+			<flow-ref doc:name="get:\pricing:ntn-pricing-availability-sync-papi-config" doc:id="09f9c3d0-ab9b-4bf8-a639-762dc03a6dac" name="get:\pricing:ntn-pricing-availability-sync-papi-config" />
+
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="checkingPayload" doc:id="29d63169-9948-4105-9451-e5b8254a193e" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="WSC:TIMEOUT" doc:id="b0e166ae-3191-4136-bc14-cb916703aef3" description="Test" expectedErrorType="WSC:TIMEOUT">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="business call function" doc:id="5d5e7892-c8d4-4d8a-b0ed-81b06d1a32ea" processor="wsc:consume" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="business function call" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="4d9100ce-9fb7-4765-b973-1c18ea8378dc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="WSC:TIMEOUT" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="email send" doc:id="e998355a-333a-488a-aef2-c96b2952424d" processor="email:send" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="email send" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="c18dd49f-840e-4703-927c-12cb7e305a15" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+
+		</munit:behavior>
+		<munit:execution>
+			<munit:set-event doc:name="input request" doc:id="e03e8ea9-a4b7-44a4-a58b-e6f40f39de33">
+				<munit:payload value='#[readUrl("classpath://input_request.json")]' />
+			</munit:set-event>
+			<flow-ref doc:name="get:\pricing:ntn-pricing-availability-sync-papi-config" doc:id="5ac3650c-95c3-4847-9372-9d8376fa40ce" name="get:\pricing:ntn-pricing-availability-sync-papi-config" />
+
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="checkingPayload" doc:id="5f15a4f4-e90b-4769-96c9-d6df0ddaa576" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		
+</munit:validation>
+	</munit:test>
+	<munit:test name="WSC:BAD_REQUEST" doc:id="0e8f686c-2069-45e9-b746-3463a0dacfb8" description="Test" expectedErrorType="WSC:BAD_REQUEST" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="business call function" doc:id="83d2038f-582d-4989-b7a5-9ae1179366a3" processor="wsc:consume" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="business function call" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="4d9100ce-9fb7-4765-b973-1c18ea8378dc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="WSC:BAD_REQUEST" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="email send" doc:id="f759fb78-c527-47b5-8441-0b7c43eb1969" processor="email:send">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="email send" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="c18dd49f-840e-4703-927c-12cb7e305a15" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="input request" doc:id="9391914a-8f68-421d-844e-ff311a5d70c8">
+				<munit:payload value='#[readUrl("classpath://input_request.json")]' />
+			</munit:set-event>
+			<flow-ref doc:name="get:\pricing:ntn-pricing-availability-sync-papi-config" doc:id="90b5faee-b92f-49d2-b13b-6755d0561531" name="get:\pricing:ntn-pricing-availability-sync-papi-config" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="checkingPayload" doc:id="70173f3d-a950-4c6c-8153-c5a88853f88d" expression="#[payload]" is="#[MunitTools::notNullValue()]" />
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

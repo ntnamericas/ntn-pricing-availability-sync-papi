@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="ntn-pricing-availability-sync-papi-test-suite.xml" />
+	<munit:test name="ntn-pricing-availability-sync-papi-test-suite" doc:id="fe432cf6-1f7f-4878-bc41-d36333eea6f8" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="business function call" doc:id="cb29580f-910d-45c5-ac4b-c9629b5c62d4" processor="wsc:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="business function call" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="4d9100ce-9fb7-4765-b973-1c18ea8378dc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="consumerResponse" value='#[readUrl("classpath://consumer_response.json")]' mediaType="application/java" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="input request" doc:id="7944b373-897a-4eb6-9007-e8bd7648add4" >
+				<munit:payload value='#[readUrl("classpath://input_request.json")]' />
+			</munit:set-event>
+			<flow-ref doc:name="get:\pricing:ntn-pricing-availability-sync-papi-config" doc:id="8e730142-1d9b-40e9-ba2a-440b2330801e" name="get:\pricing:ntn-pricing-availability-sync-papi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="5c1ed53a-b57a-4df2-a45f-2f86c21b67ca" expression="#[payload != null]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

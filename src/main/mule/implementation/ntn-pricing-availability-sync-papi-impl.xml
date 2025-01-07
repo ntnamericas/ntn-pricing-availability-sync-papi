@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:salesforce-composite="http://www.mulesoft.org/schema/mule/salesforce-composite"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce-composite http://www.mulesoft.org/schema/mule/salesforce-composite/current/mule-salesforce-composite.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+	<sub-flow name="pricing-availabilitySub_Flow" doc:id="840e04e4-4064-420d-949a-13242c0ab1db" >
+		<ee:transform doc:name="consumer request" doc:id="fe6cb177-4c76-44ff-b83d-61a7b8d6685f" >
+			<ee:message >
+				<ee:set-payload resource="dwl/pricingRequest.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="request logger" doc:id="19e0d7f9-db67-4b01-a73f-f8bdde3c2e81" message='inputRequest:#[payload]'/>
+		<try doc:name="Try" doc:id="42759506-2527-4870-96c5-e906da9d9ef1" >
+			<wsc:consume operation="getPartsDetail" doc:name="business function call" doc:id="4d9100ce-9fb7-4765-b973-1c18ea8378dc" config-ref="Web_Service_Consumer_Config" target="consumerResponse" >
+				<reconnect frequency="${max.frequency}" count="${max.retries}"/>
+			</wsc:consume>
+			<logger level="INFO" doc:name="after business function call" doc:id="0d0b682f-f027-42d0-8118-343400f68704" message='#[%dw 2.0&#10;output application/json&#10;---&#10;vars.consumerResponse]' />
+			<ee:transform doc:name="response" doc:id="86dcd724-16dc-41e0-8ce6-e4065515982d">
+			<ee:message>
+					<ee:set-payload resource="dwl/pricingResponse.dwl" />
+			</ee:message>
+		</ee:transform>
+			<logger level="INFO" doc:name=" Response logger" doc:id="7670e4f6-fa95-4d88-a936-96ba003c915f" message="#[payload]"/>
+			<error-handler >
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2ea0c669-1f5d-4c5e-8df6-51ed5325235f" type="ANY" >
+					<ee:transform doc:name="email request" doc:id="19faecb4-667a-4933-aa75-631c54fa6ebe" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+//error.exception.cause.cause.messageString
+
+{ "message" : "Not able to connect to back end business function"}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<email:send doc:name="email send" doc:id="c18dd49f-840e-4703-927c-12cb7e305a15" config-ref="Email_SMTP" fromAddress='#["mulesoftsmtpuser@ntnusa.com"]' subject="Business Function Connectivity">
+						<reconnect count="${max.retries}" frequency="${max.frequency}"/>
+						<email:to-addresses >
+							<email:to-address value='#["mulesoftsmtpuser@ntnusa.com"]' />
+						</email:to-addresses>
+					</email:send>
+					<logger level="INFO" doc:name="email response" doc:id="30a09598-e8e5-41e7-9871-291c6bd5f168" message="#[payload]" />
+					<ee:transform doc:name="error response" doc:id="4c8b7bc0-ca81-4247-b87b-00b0bb0f4f83" >
+						<ee:message >
+							<ee:set-payload resource="dwl/errorResponse.dwl" />
+						</ee:message>
+					</ee:transform>
+				</on-error-propagate>
+			</error-handler>
+		</try>
+		<logger level="INFO" doc:name="End Logger" doc:id="549300a9-770c-4473-8431-90a8e2518eeb" message="pricing availability flow end "/>
+	</sub-flow>
+</mule>

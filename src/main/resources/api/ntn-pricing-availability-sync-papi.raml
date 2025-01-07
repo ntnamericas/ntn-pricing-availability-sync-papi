@@ -1,0 +1,37 @@
+#%RAML 1.0
+title: ntn-pricing-availability-sync-papi
+version: v1
+protocols: [HTTPS,HTTP]
+mediaType: application/json
+# securitySchemes:
+#   security: !include libraries/securitySchemes.raml
+# securedBy: [security] 
+
+/pricing:
+  displayName: create/update pricing data
+  get:
+    queryParameters:
+      PartId:
+        example: "I-6203"
+      Qty:
+        example: "0"
+      ShipTo:
+        example: "30058"
+      SFID:
+        example: "0QLVW000007N1PG4A0"
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/pricingAvailabilityResponse.json
+              
+        
+        
+
+            
+          
+
+
+   
+                                        
+

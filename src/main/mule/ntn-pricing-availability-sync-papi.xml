@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <apikit:config name="ntn-pricing-availability-sync-papi-config" api="ntn-pricing-availability-sync-papi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="ntn-pricing-availability-sync-papi-main">
+        <http:listener path="/api/*" config-ref="HTTP_Listener_config">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="ntn-pricing-availability-sync-papi-config" />
+		<error-handler ref="global-error-handler" />
+    </flow>
+    <flow name="get:\pricing:ntn-pricing-availability-sync-papi-config">
+        <logger level="INFO" doc:name="Start Logger" doc:id="4b3eedc1-80cd-491d-b5c8-252e77c686be" message="pricing availability flow start"/>
+		<ee:transform doc:name="input payload" doc:id="7afc2fda-80e8-4c66-a580-1f4063183ab1">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="PartId"><![CDATA[attributes.queryParams."PartId"]]></ee:set-variable>
+                <ee:set-variable variableName="Qty"><![CDATA[attributes.queryParams."Qty"]]></ee:set-variable>
+                <ee:set-variable variableName="SFID"><![CDATA[attributes.queryParams."SFID"]]></ee:set-variable>
+                <ee:set-variable variableName="ShipTo"><![CDATA[attributes.queryParams."ShipTo"]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <flow-ref doc:name="pricing-availabilitySub_Flow" doc:id="afe1d2db-f7e4-4b8b-b0fd-690e58f8f3e4" name="pricing-availabilitySub_Flow" />
+    </flow>
+</mule>

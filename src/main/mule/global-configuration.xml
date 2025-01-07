@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:salesforce-composite="http://www.mulesoft.org/schema/mule/salesforce-composite" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce-composite http://www.mulesoft.org/schema/mule/salesforce-composite/current/mule-salesforce-composite.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="e42dfb8f-1166-427c-8a2c-b5fedf9384a6" file="properties/${mule.env}-secure-properties.yaml" key="${mule.key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<configuration-properties doc:name="Configuration properties" doc:id="75f9df82-d54a-42f9-b0b5-13246dfcd8de" file="properties/common.yaml" />
+	<global-property doc:name="Global Property" doc:id="557a1bee-da5c-4674-9922-0255a57482da" name="mule.key" value="${mule.key}" />
+	<configuration-properties doc:name="Configuration properties" doc:id="1f2f5b8a-472b-447e-ab1e-0198425e8c35" file="properties/${mule.env}-properties.yaml" />
+	<wsc:config name="Web_Service_Consumer_Config"
+		doc:name="Web Service Consumer Config"
+		doc:id="766a2b6c-e195-43ac-9fa9-ebcbe96d9614">
+		<wsc:connection
+			wsdlLocation="${wsdl.location}" service="${wsdl.service}" port="${wsdl.port}" address="${wsdl.address}">
+			<reconnection >
+				<reconnect frequency="${max.frequency}" count="${max.retries}"/>
+			</reconnection>
+			<wsc:custom-transport-configuration>
+				<wsc:default-http-transport-configuration
+					timeout="120000" />
+			</wsc:custom-transport-configuration>
+			<wsc:web-service-security
+				mustUnderstand="false" securityHeadersOrder="TimestampAtEnd">
+				<wsc:username-token-security-strategy
+					username="${wsdl.userName}" password="${secure::wsdl.password}" addNonce="true"
+					addCreated="true" />
+			</wsc:web-service-security>
+		</wsc:connection>
+	</wsc:config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="8c8b060e-e362-468a-afdd-20521d2a496c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="81e4cdfc-8ea1-41bc-8a63-03ec0d3dabfb" >
+		<email:smtp-connection host="smtp.office365.com" user="${smtp.user}" password="${secure::smtp.password}">
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
+	<configuration doc:name="Configuration" doc:id="7af557b0-5ba7-4fea-94dc-1e4502d6fd0d" defaultErrorHandler-ref="global-error-handler" />
+</mule>

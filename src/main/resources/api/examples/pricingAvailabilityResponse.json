@@ -1,0 +1,48 @@
+{
+  "responseDetailParts": {
+    "e1MessageList": null,
+    "partDetails": [
+      {
+        "BOM": "6203U[TB00]",
+        "abcSalesCode": null,
+        "branchQuantities": {
+          "branch": "1801",
+          "branchFlag": "P",
+          "bulkQuantity": "498",
+          "quantity": "176",
+          "safety1x1": "36",
+          "safetyBulk": "0"
+        },
+        "branchQuantities": {
+          "branch": "1802",
+          "branchFlag": "P",
+          "bulkQuantity": "0",
+          "quantity": "12",
+          "safety1x1": "12",
+          "safetyBulk": "0"
+        },
+        "brand": "NTN",
+        "buyerNumber": "0",
+        "cost02": "0.8950",
+        "cost07": "0.9310",
+        "cpn": null,
+        "cumLT": "0",
+        "description": "0",
+        "forcast": "0",
+        "inTransit": "0",
+        "mfgOrigin": "TMF",
+        "part": "I-6203",
+        "plannerNumber": "21338",
+        "poQuantity": "0",
+        "price": "0",
+        "priceMethodGroup": "P-LIST",
+        "rebate1": null,
+        "rebate2": null,
+        "requestQuantity": "5",
+        "rework": "0",
+        "shipTo": "30059",
+        "workOrderQuantity": "0"
+      }
+    ]
+  }
+}

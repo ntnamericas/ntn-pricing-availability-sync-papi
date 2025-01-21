@@ -10,6 +10,8 @@ http:
   port: "8081"
 smtp:
   user: "mulesoftsmtpuser@ntnusa.com"
+  host: "smtp.office365.com"
+  port: "25"
   
 wsdl:
   location: "https://ntnpy.opc.oracleoutsourcing.com/PY920/CPQPartsManager?wsdl"

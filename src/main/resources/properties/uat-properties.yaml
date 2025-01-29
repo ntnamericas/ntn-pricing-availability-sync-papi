@@ -8,10 +8,11 @@ app:
 http:
   host: "0.0.0.0"
   port: "8081"
+  
 smtp:
-  user: "mulesoftsmtpuser@ntnusa.com"
   host: "smtp.office365.com"
-  port: "25"
+  port: "25"  
+  to: "kavyasree.sanjapu@prowesssoft.com"
   
 wsdl:
   location: "https://ntnpy.opc.oracleoutsourcing.com/PY920/CPQPartsManager?wsdl"

@@ -1,42 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:salesforce-composite="http://www.mulesoft.org/schema/mule/salesforce-composite" 
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
 	xmlns:s3="http://www.mulesoft.org/schema/mule/s3"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" 
-	xmlns:email="http://www.mulesoft.org/schema/mule/email"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd 
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/s3 http://www.mulesoft.org/schema/mule/s3/current/mule-s3.xsd
-http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/salesforce-composite http://www.mulesoft.org/schema/mule/salesforce-composite/current/mule-salesforce-composite.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
 	<error-handler name="global-error-handler" doc:id="dbda4398-3caf-4074-b0aa-0e37fb5c80ef" >
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="49d3d138-e808-4721-9be1-ac1a6f6ab126" when='#[error.errorType.namespace == "APIKIT"]'>
-			<ee:transform doc:name="error payload" doc:id="77d6a33c-09f7-4368-82a8-27b2d0b84a32" >
-				<ee:message >
-					<ee:set-payload resource="dwl/technicalError.dwl" />
-
-				
-</ee:message>
-				<ee:variables >
-				
-</ee:variables>
-			
-</ee:transform>
-			<logger level="ERROR" doc:name="Logger" doc:id="8eee41a9-24d6-40ec-9192-6a54d9337fd1" message="#[payload]"/>
-		
-</on-error-propagate>
-		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="23e5a881-d2bb-46f7-b754-c2bfd9762f57" type="ANY">
-			<ee:transform doc:name="error payload" doc:id="085855c0-6bb8-4b7d-a568-2ca80322328b" >
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="66bfcc86-baae-4241-a7fe-5d2f5bea05bb" type="ANY" >
+			<ee:transform doc:name="email request" doc:id="4e450e6a-2710-4043-a621-08d289dbfe5a" >
 				<ee:message >
 					<ee:set-payload resource="dwl/technicalError.dwl" />
 				</ee:message>
-				<ee:variables >
-				</ee:variables>
+				<ee:variables />
 			</ee:transform>
-			<logger level="ERROR" doc:name="Logger" doc:id="44adf8d7-0ad9-4ebd-9e2b-5adadd4d2643" message="#[payload]"/>
-		
-</on-error-continue>
-	</error-handler>
+			<logger level="ERROR" doc:name="error response" doc:id="0c9f668a-a510-411e-9755-ec1f7ef58566" message="ConnectivityIssue: #[payload]" />
+			<email:send doc:name="email send" doc:id="7eca9350-6b45-4cec-abe7-edd10f1c9fbb" config-ref="Email_SMTP" subject="#[&quot;*** E-mail Notification: &quot; ++ p('app.env') ++ &quot;  *** Error Alert in  &quot; ++ p('app.name')]" toAddresses="#[p('smtp.to') splitBy &quot;,&quot;]" fromAddress='${secure::smtp.user}'>
+				<reconnect frequency="${max.frequency}" count="${max.retries}" />
+				<email:body contentType="text/plain" encoding="UTF-8" >
+					<email:content ><![CDATA[#[%dw 2.0
+output application/xml
+skipNullOn="everywhere"
+
+---
+{
+    "html":{
+        "body":{
+            "div" @(class:"total"):{
+                "div" @(class:"header"):{
+                    "h2":"Alert from Mulesoft"
+                },
+                "div" @(class:"content"):{
+                    "p": "Hi,",
+                    "p": "Greetings!!!",
+					"p": "Error while processing, please take corrective action."
+                },
+
+                "div":{
+                    "table" @(width:'40%', border:'1', cellspacing:'0'): {
+							"tr":{
+                                "th": "InterfaceName",
+                                "td": p('app.name')
+                            },
+                          "tr":{
+                                "th": "Error Type",
+                                "td": error.errorType.asString
+                            },
+                     
+                          "tr":{
+                                "th": "Error Message",
+                                "td": payload.Message
+
+                            }
+                                                     
+				
+                        }
+                }
+            }
+        }
+    }
+}]]]></email:content>
+				</email:body>
+			</email:send>
+			<logger level="INFO" doc:name="email response" doc:id="26a3fbee-4a38-40da-9e37-f142378f0904" message="EmailResponse:#[payload]" />
+		</on-error-continue>
+	
+</error-handler>
+
 </mule>

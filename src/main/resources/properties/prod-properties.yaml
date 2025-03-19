@@ -1,9 +1,21 @@
 api:
-  id: "" 
+  id: "12345678" 
 
 app:
   name:  "pricing-availability" 
-  version: ""  
-  env: ""
-
-
+  version: "1.0.0"  
+  env: "dev"
+http:
+  host: "0.0.0.0"
+  port: "8081"
+  
+smtp:
+  host: "smtp.office365.com"
+  port: "25"  
+  to: "kavyasree.sanjapu@prowesssoft.com"
+wsdl:
+  location: "https://ntnpd.opc.oracleoutsourcing.com/PD920/CPQPartsManager?wsdl"
+  service: "CPQPartsManagerService"
+  port: "CPQPartsManagerPort"
+  address: "https://ntnpd.opc.oracleoutsourcing.com:443/PD920/CPQPartsManager"
+  userName: "BIZSERVICE"

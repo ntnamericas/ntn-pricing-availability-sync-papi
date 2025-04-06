@@ -4,7 +4,7 @@
 
 	<groupId>com.mycompany</groupId>
 	<artifactId>ntn-pricing-availability-sync-app</artifactId>
-	<version>1.0.0-rc1</version>
+	<version>1.0.0-rc2</version>
 	<packaging>mule-application</packaging>
 
 	<name>ntn-pricing-availability-sync-app</name>
@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-email-connector</artifactId>
-			<version>1.7.4</version>
+			<version>1.7.5</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>

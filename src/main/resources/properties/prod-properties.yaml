@@ -4,7 +4,7 @@ api:
 app:
   name:  "pricing-availability" 
   version: "1.0.0"  
-  env: "dev"
+  env: "prod"
 http:
   host: "0.0.0.0"
   port: "8081"
@@ -12,7 +12,7 @@ http:
 smtp:
   host: "smtp.office365.com"
   port: "25"  
-  to: "kavyasree.sanjapu@prowesssoft.com"
+  to: "donotreply@ntnusa.com,ntnmule@prowesssoft.com"
 wsdl:
   location: "https://ntnpd.opc.oracleoutsourcing.com/PD920/CPQPartsManager?wsdl"
   service: "CPQPartsManagerService"

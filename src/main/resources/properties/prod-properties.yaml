@@ -12,10 +12,11 @@ http:
 smtp:
   host: "smtp.office365.com"
   port: "25"  
-  to: "kavyasree.sanjapu@prowesssoft.com"
+  to: "donotreply@ntnusa.com,ntnmule@prowesssoft.com"
 wsdl:
   location: "https://ntnpd.opc.oracleoutsourcing.com/PD920/CPQPartsManager?wsdl"
   service: "CPQPartsManagerService"
   port: "CPQPartsManagerPort"
   address: "https://ntnpd.opc.oracleoutsourcing.com:443/PD920/CPQPartsManager"
   userName: "BIZSERVICE"
+  namespaces: "http://ntnusa.e1.bssv.JP57CPQ1/"

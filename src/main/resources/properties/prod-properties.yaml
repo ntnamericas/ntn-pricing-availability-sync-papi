@@ -4,7 +4,7 @@ api:
 app:
   name:  "pricing-availability" 
   version: "1.0.0"  
-  env: "dev"
+  env: "PROD"
 http:
   host: "0.0.0.0"
   port: "8081"
@@ -17,6 +17,6 @@ wsdl:
   location: "https://ntnpd.opc.oracleoutsourcing.com/PD920/CPQPartsManager?wsdl"
   service: "CPQPartsManagerService"
   port: "CPQPartsManagerPort"
-  address: "https://ntnpd.opc.oracleoutsourcing.com:443/PD920/CPQPartsManager"
-  userName: "BIZSERVICE"
+  address: "https://ntnpd.opc.oracleoutsourcing.com/PD920/CPQPartsManager"
+  userName: "BIZSERVIC"
   namespaces: "http://ntnusa.e1.bssv.JP57CPQ1/"

@@ -52,13 +52,15 @@ skipNullOn="everywhere"
                             },
                           "tr":{
                                 "th": "Error Type",
-                                "td": error.errorType.asString
+                                "td": payload.errorType
                             },
-                     
+                          "tr":{
+                                "th": "Salesforce Id",
+                                "td": vars.SFID
+                            },
                           "tr":{
                                 "th": "Error Message",
-                                "td": payload.Message
-
+                                "td": payload
                             }
                                                      
 				

@@ -11,6 +11,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/salesforce-composite http://www.mulesoft.org/schema/mule/salesforce-composite/current/mule-salesforce-composite.xsd
 http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+	
 	<sub-flow name="pricing-availabilitySub_Flow" doc:id="840e04e4-4064-420d-949a-13242c0ab1db" >
 		<ee:transform doc:name="consumer request" doc:id="fe6cb177-4c76-44ff-b83d-61a7b8d6685f" >
 			<ee:message >
@@ -22,6 +23,7 @@ http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/
 			<wsc:consume operation="getPartsDetail" doc:name="business function call" doc:id="4d9100ce-9fb7-4765-b973-1c18ea8378dc" config-ref="Web_Service_Consumer_Config" target="consumerResponse" >
 				<reconnect frequency="${max.frequency}" count="${max.retries}"/>
 			</wsc:consume>
+			<logger level="INFO" doc:name="Logger" doc:id="21c7d624-5453-4acf-9a1e-6b7d99593586" message='#["\n Business Service Response"]'/>
 			<logger level="INFO" doc:name="after business function call" doc:id="0d0b682f-f027-42d0-8118-343400f68704" message='#[%dw 2.0&#10;output application/json&#10;---&#10;vars.consumerResponse]' />
 			<ee:transform doc:name="response" doc:id="86dcd724-16dc-41e0-8ce6-e4065515982d">
 			<ee:message>
@@ -32,11 +34,63 @@ http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/
 			<error-handler >
 				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2ea0c669-1f5d-4c5e-8df6-51ed5325235f" type="ANY" >
 					<logger level="INFO" doc:name="errorLogger" doc:id="6b688272-b3b1-48ef-a37f-c5e34fa5bda4" message="error flow started"/>
-					<email:send doc:name="emailSend" doc:id="c0b30ef2-ae8c-4995-b518-74c66d8e7c39" config-ref="Email_SMTP" fromAddress="#[Mule::p('smtp.user')]" subject="#[&quot;*** E-mail Notification: &quot; ++ p('app.env') ++ &quot;  *** Error Alert in  &quot; ++ p('app.name')]" toAddresses="#[Mule::p('smtp.to') splitBy &quot;,&quot;]">
+					<!-- [STUDIO:"emailSend"]<email:send doc:name="emailSend" doc:id="c0b30ef2-ae8c-4995-b518-74c66d8e7c39" config-ref="Email_SMTP" fromAddress="#[Mule::p('smtp.user')&#93;" subject="#[&quot;*** E-mail Notification: &quot; ++ p('app.env') ++ &quot;  *** Error Alert in  &quot; ++ p('app.name')&#93;" toAddresses="#[Mule::p('smtp.to') splitBy &quot;,&quot;&#93;">
 						<reconnect frequency="${max.frequency}" count="${max.retries}"/>
 						<email:body contentType="text/plain" encoding="UTF-8">
 							<email:content><![CDATA[#[%dw 2.0
 output application/xml
+skipNullOn="everywhere"
+
+&#45;&#45;-
+{
+    "html":{
+        "body":{
+            "div" @(class:"total"):{
+                "div" @(class:"header"):{
+                    "h2":"Alert from Mulesoft"
+                },
+                "div" @(class:"content"):{
+                    "p": "Hi,",
+                    "p": "Greetings!!!",
+					"p": "Error while processing, please take corrective action."
+                },
+
+                "div":{
+                    "table" @(width:'40%', border:'1', cellspacing:'0'): {
+							"tr":{
+                                "th": "InterfaceName",
+                                "td": p('app.name')
+                            },
+                          "tr":{
+                                "th": "Error Type",
+                                "td": error.errorType.identifier
+                            },
+                          "tr":{
+                                "th": "Part Id",
+                                "td": vars.PartId
+                            },
+                          "tr":{
+                                "th": "Error Message",
+                                "td": error.errorMessage.payload.Message default (error.description)
+
+                            }
+                                                     
+				
+                        }
+                }
+            }
+        }
+    }
+}&#93;&#93;&#93;></email:content>
+						</email:body>
+						<email:attachments><![CDATA[#[{"pricing_and_availability_Failures.csv": payload}&#93;&#93;&#93;></email:attachments>
+					</email:send> [STUDIO] -->
+					<email:send doc:name="emailSend1" doc:id="0e6e87dd-c0b2-4cc4-813d-7e39510d67e9" config-ref="PWS_SMTP" subject="#[&quot;*** E-mail Notification: &quot; ++ p('app.env') ++ &quot;  *** Error Alert in  &quot; ++ p('app.name')]" toAddresses="#[Mule::p('smtp.to') splitBy &quot;,&quot;]">
+						<reconnect frequency="${max.frequency}" count="${max.retries}" />
+						<email:body contentType="text/plain" encoding="UTF-8">
+							<email:content><![CDATA[#[
+							%dw 2.0
+output text/html
 skipNullOn="everywhere"
 
 ---
@@ -61,7 +115,7 @@ skipNullOn="everywhere"
                             },
                           "tr":{
                                 "th": "Error Type",
-                                "td": error.errorType.asString
+                                "td": error.errorType.identifier
                             },
                           "tr":{
                                 "th": "Part Id",
@@ -92,6 +146,6 @@ skipNullOn="everywhere"
 				</on-error-propagate>
 			</error-handler>
 		</try>
-		<logger level="INFO" doc:name="End Logger" doc:id="549300a9-770c-4473-8431-90a8e2518eeb" message="pricing availability flow end "/>
+		<logger level="INFO" doc:name="End Logger" doc:id="549300a9-770c-4473-8431-90a8e2518eeb" message='#["\n pricing availability flow end"]'/>
 	</sub-flow>
 </mule>

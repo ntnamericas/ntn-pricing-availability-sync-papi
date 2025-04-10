@@ -4,7 +4,7 @@
 
 	<groupId>com.mycompany</groupId>
 	<artifactId>ntn-pricing-availability-sync-app</artifactId>
-	<version>1.1.0-rc2</version>
+	<version>1.1.0-rc6</version>
 	<packaging>mule-application</packaging>
 
 	<name>ntn-pricing-availability-sync-app</name>

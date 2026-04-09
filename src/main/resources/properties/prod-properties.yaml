@@ -18,5 +18,5 @@ wsdl:
   service: "CPQPartsManagerService"
   port: "CPQPartsManagerPort"
   address: "https://ntnpd.opc.oracleoutsourcing.com/PD920/CPQPartsManager"
-  userName: "BIZSERVIC"
+  userName: "BIZSERVICE"
   namespaces: "http://ntnusa.e1.bssv.JP57CPQ1/"
